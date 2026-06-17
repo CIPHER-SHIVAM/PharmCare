@@ -104,7 +104,6 @@ Simply open index.html with Live Server (VS Code extension) or any local server.
 Use the credentials below to access the system.
 
 📂 Project Structure
-text
 pharmcare/
 ├── screenshots/          # 📸 Screenshots for README
 │   ├── login.png
@@ -225,3 +224,9 @@ Live Demo: https://pharm-care.vercel.app/
 
 <p align="center">Made with ❤️ by <strong>SHIVAM SHAH</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
 Happy managing your pharmacy with PharmaCare! 💊
+
+---
+
+## ✅ Done!
+
+After you paste this and commit, your README will look **professional, organized, and easy to read**. Your visitors will understand your project clearly. 🚀
