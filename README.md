@@ -1,86 +1,101 @@
-💊 PharmaCare – Pharmacy Management System
-A modern, fully responsive pharmacy management system built with React – streamlining inventory, orders, and stock monitoring with a stunning glass‑morphism UI.
+# 💊 PharmaCare – Pharmacy Management System
 
-📌 Table of Contents
-Overview
+> A modern, fully responsive pharmacy management system built with **React** – streamlining inventory, orders, and stock monitoring with a stunning glass‑morphism UI.
 
-Live Demo
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/CIPHER-SHIVAM/PharmCare/blob/main/LICENSE)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://reactjs.org/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?logo=vercel)](https://pharm-care.vercel.app/)
 
-Features
+---
 
-Tech Stack
+## 📌 Table of Contents
 
-Screenshots
+- [Overview](#-overview)
+- [Live Demo](#-live-demo)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Screenshots](#-screenshots)
+- [Quick Start](#-quick-start)
+- [Project Structure](#-project-structure)
+- [Login Credentials](#-login-credentials)
+- [Installation & Setup](#-installation--setup)
+- [Deployment](#-deployment)
+- [What Makes It Unique](#-what-makes-it-unique)
+- [Future Enhancements](#-future-enhancements)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
 
-Quick Start
+---
 
-Project Structure
+## 📖 Overview
 
-Login Credentials
+**PharmaCare** is a complete, browser‑based pharmacy management solution. It enables pharmacy staff and administrators to:
 
-Installation & Setup
+- ✅ Manage medicine inventory (add, edit, delete, search, filter)
+- ✅ Process customer orders with real‑time stock deduction
+- ✅ Track total stock value, revenue, low‑stock items, and expiry alerts
+- ✅ Generate printable receipts for orders
+- ✅ Toggle between light and dark modes
 
-Deployment
+All data is stored locally in your browser using **localStorage** – no server, no database, no setup required.
 
-What Makes It Unique
+---
 
-Future Enhancements
+## 🌐 Live Demo
 
-Contributing
+> 🔗 **Live URL:** [https://pharm-care.vercel.app/](https://pharm-care.vercel.app/)
 
-License
+---
 
-Contact
+## ✨ Features
 
-📖 Overview
-PharmaCare is a complete, browser‑based pharmacy management solution. It enables pharmacy staff and administrators to:
+| Feature | Description |
+|---------|-------------|
+| 🔐 **Role‑based Login** | Admin (full CRUD) and Staff (view & order only) |
+| 📊 **Smart Dashboard** | Total stock value, revenue, orders, low‑stock & expiry alerts, top medicines, recent orders |
+| 💊 **Inventory Management** | Add, edit, delete, search, and filter by type (Tablet, Capsule, Liquid, Cream) |
+| 🛒 **Order Processing** | Create orders, auto‑deduct stock, print receipts |
+| 🌙 **Dark/Light Mode** | Toggle theme for comfortable viewing |
+| 💾 **Persistent Storage** | All data saved in browser localStorage – no backend needed |
+| 📱 **Fully Responsive** | Works on desktop, tablet, and mobile |
+| 🧊 **Glass‑morphism UI** | Premium visual design with floating medical icons and smooth animations |
 
-✅ Manage medicine inventory (add, edit, delete, search, filter)
+---
 
-✅ Process customer orders with real‑time stock deduction
+## 🛠️ Tech Stack
 
-✅ Track total stock value, revenue, low‑stock items, and expiry alerts
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React 18 (functional components, hooks, Context API) |
+| **Styling** | Tailwind CSS + Custom CSS (glass‑morphism, animations) |
+| **Icons** | Font Awesome 6 |
+| **Data** | localStorage (no server required) |
+| **Deployment** | Static site – Netlify, Vercel, GitHub Pages, any static hosting |
 
-✅ Generate printable receipts for orders
+---
 
-✅ Toggle between light and dark modes
+## 📸 Screenshots
 
-All data is stored locally in your browser using localStorage – no server, no database, no setup required.
+> **📂 Note:** Place your screenshots inside a `screenshots/` folder at the root of your project.
 
-🌐 Live Demo
-🔗 Live URL: https://pharm-care.vercel.app/
-✨ Features
-Feature	Description
-🔐 Role‑based Login	Admin (full CRUD) and Staff (view & order only)
-📊 Smart Dashboard	Total stock value, revenue, orders, low‑stock & expiry alerts, top medicines, recent orders
-💊 Inventory Management	Add, edit, delete, search, and filter by type (Tablet, Capsule, Liquid, Cream)
-🛒 Order Processing	Create orders, auto‑deduct stock, print receipts
-🌙 Dark/Light Mode	Toggle theme for comfortable viewing
-💾 Persistent Storage	All data saved in browser localStorage – no backend needed
-📱 Fully Responsive	Works on desktop, tablet, and mobile
-🧊 Glass‑morphism UI	Premium visual design with floating medical icons and smooth animations
-🛠️ Tech Stack
-Layer	Technology
-Frontend	React 18 (functional components, hooks, Context API)
-Styling	Tailwind CSS + Custom CSS (glass‑morphism, animations)
-Icons	Font Awesome 6
-Data	localStorage (no server required)
-Deployment	Static site – Netlify, Vercel, GitHub Pages, any static hosting
-📸 Screenshots
-Login Page
-login.png
-Dashboard
-dashboard.png
-Medicines Inventory
-medicine.png
-Orders
-order.png
+| Login Page | Dashboard |
+|:---:|:---:|
+| ![Login](screenshots/login.png) | ![Dashboard](screenshots/dashboard.png) |
 
-🚀 Quick Start
-1. Clone the repository
-bash
-git clone https://github.com/yourusername/pharmacare.git
-cd pharmacare
+| Medicines | Orders |
+|:---:|:---:|
+| ![Medicines](screenshots/medicine.png) | ![Orders](screenshots/order.png) |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/CIPHER-SHIVAM/PharmCare.git
+cd PharmCare
 2. Open with Live Server
 Simply open index.html with Live Server (VS Code extension) or any local server.
 
@@ -91,17 +106,20 @@ Use the credentials below to access the system.
 
 📂 Project Structure
 text
-pharmacare/
+pharmcare/
+├── screenshots/        # 📸 Screenshots for README
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── medicine.png
+│   └── order.png
 ├── index.html          # Main HTML file with CDN links
 ├── style.css           # Custom styles + animations
 ├── script.js           # Complete React application
 └── README.md           # This file
-
 🔐 Login Credentials
 Role	Username	Password
 Admin (full access)	admin	admin123
 Staff (view & orders only)	staff	staff123
-
 🛠️ Installation & Setup
 Prerequisites
 Any modern browser (Chrome, Firefox, Edge, Safari)
@@ -112,8 +130,8 @@ Steps
 Clone the repository
 
 bash
-git clone https://github.com/yourusername/pharmacare.git
-cd pharmacare
+git clone https://github.com/CIPHER-SHIVAM/PharmCare.git
+cd PharmCare
 Open the project
 
 Using VS Code: Install Live Server extension → Right‑click index.html → Open with Live Server
@@ -138,7 +156,7 @@ Select the branch (e.g., main) and / (root) folder
 
 Click Save
 
-Your site will be live at https://cipher-shivam.github.io/PharmCare/
+Your site will be live at: https://cipher-shivam.github.io/PharmCare/
 
 Manual Upload
 Upload all files to any static hosting service (Netlify, Vercel, AWS S3, Firebase Hosting, etc.)
@@ -201,9 +219,10 @@ Tailwind CSS – rapid styling
 React – powerful component model
 
 📧 Contact
-Your Name –sahsujal72@gmail.com
+Your Name – sahsujal72@gmail.com
 GitHub: CIPHER-SHIVAM
-Live Demo: https://cipher-shivam.github.io/PharmCare/
+Live Demo: https://pharm-care.vercel.app/
 
-<p align="center">Made with ❤️ by <strong>Your Name</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
+<p align="center">Made with ❤️ by <strong>SHIVAM SHAH</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
 Happy managing your pharmacy with PharmaCare! 💊
+
