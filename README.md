@@ -82,18 +82,17 @@ All data is stored locally in your browser using **localStorage** – no server,
 
 | Login Page | Dashboard |
 |:---:|:---:|
-| ![Login](screenshots/login.png) | ![Dashboard](screenshots/dashboard.png) |
+| ![Login](login.png) | ![Dashboard](dashboard.png) |
 
 | Medicines | Orders |
 |:---:|:---:|
-| ![Medicines](screenshots/medicine.png) | ![Orders](screenshots/order.png) |
+| ![Medicines](medicine.png) | ![Orders](order.png) |
 
 ---
 
-## 🚀 Quick Start
-
-### 1. Clone the repository
-```bash
+🚀 Quick Start
+1. Clone the repository
+bash
 git clone https://github.com/CIPHER-SHIVAM/PharmCare.git
 cd PharmCare
 2. Open with Live Server
@@ -219,10 +218,9 @@ Tailwind CSS – rapid styling
 React – powerful component model
 
 📧 Contact
-Your Name – sahsujal72@gmail.com
+SHIVAM SHAH – sahsujal72@gmail.com
 GitHub: CIPHER-SHIVAM
 Live Demo: https://pharm-care.vercel.app/
 
 <p align="center">Made with ❤️ by <strong>SHIVAM SHAH</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
 Happy managing your pharmacy with PharmaCare! 💊
-
