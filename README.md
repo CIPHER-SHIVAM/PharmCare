@@ -104,6 +104,7 @@ Simply open index.html with Live Server (VS Code extension) or any local server.
 Use the credentials below to access the system.
 
 📂 Project Structure
+text
 pharmcare/
 ├── screenshots/          # 📸 Screenshots for README
 │   ├── login.png
@@ -114,15 +115,14 @@ pharmcare/
 ├── style.css             # Custom styles + animations
 ├── script.js             # Complete React application
 └── README.md             # This file
-
 🔐 Login Credentials
 Role	Username	Password
 Admin (full access)	admin	admin123
-Staff (view & orders only) staff	staff123
-
+Staff (view & orders only)	staff	staff123
 🛠️ Installation & Setup
 Prerequisites
 Any modern browser (Chrome, Firefox, Edge, Safari)
+
 A local server (Live Server extension for VS Code recommended)
 
 Steps
@@ -224,6 +224,11 @@ Live Demo: https://pharm-care.vercel.app/
 
 <p align="center">Made with ❤️ by <strong>SHIVAM SHAH</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
 Happy managing your pharmacy with PharmaCare! 💊
+
+---
+
+Just **copy this entire block** and paste it into your `README.md` – it will display perfectly on GitHub. 🚀
+
 
 ---
 
