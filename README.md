@@ -90,21 +90,22 @@ All data is stored locally in your browser using **localStorage** – no server,
 
 ---
 
-🚀 Quick Start
-1. Clone the repository
-bash
+## 🚀 Quick Start
+### 1. Clone the repository
+```bash
 git clone https://github.com/CIPHER-SHIVAM/PharmCare.git
 cd PharmCare
-2. Open with Live Server
+```
+### 2. Open with Live Server
 Simply open index.html with Live Server (VS Code extension) or any local server.
 
 ⚠️ Do not open directly via file:// – CDN resources may not load properly due to CORS.
 
-3. Login and explore
+### 3. Login and explore
 Use the credentials below to access the system.
 
-📂 Project Structure
-text
+## 📂 Project Structure
+```
 pharmcare/
 ├── screenshots/          # 📸 Screenshots for README
 │   ├── login.png
@@ -115,11 +116,14 @@ pharmcare/
 ├── style.css             # Custom styles + animations
 ├── script.js             # Complete React application
 └── README.md             # This file
-🔐 Login Credentials
-Role	Username	Password
-Admin (full access)	admin	admin123
-Staff (view & orders only)	staff	staff123
-🛠️ Installation & Setup
+```
+## 🔐 Login Credentials
+Role |Username	|Password| 
+|-------|------------|------|
+Admin (full access) |admin|	admin123
+Staff (view & orders only)|	staff |	staff123
+## 🛠️ Installation & Setup
+```
 Prerequisites
 Any modern browser (Chrome, Firefox, Edge, Safari)
 
@@ -140,8 +144,10 @@ Using Python: python -m http.server → visit http://localhost:8000
 Using Node: npx serve → visit the provided URL
 
 Login with the credentials above
+```
 
-🚢 Deployment
+## 🚢 Deployment
+```
 Deploy to Netlify (1‑click)
 https://www.netlify.com/img/deploy/button.svg
 
@@ -159,8 +165,10 @@ Your site will be live at: https://cipher-shivam.github.io/PharmCare/
 
 Manual Upload
 Upload all files to any static hosting service (Netlify, Vercel, AWS S3, Firebase Hosting, etc.)
+```
 
-💡 What Makes It Unique
+## 💡 What Makes It Unique
+```
 ✅ Zero dependencies – no Node.js, npm, or build tools required
 
 ✅ Offline‑first – works entirely in the browser after the initial load
@@ -172,8 +180,10 @@ Upload all files to any static hosting service (Netlify, Vercel, AWS S3, Firebas
 ✅ Medical‑themed UI – floating icons, pulsing rings, glass‑morphism effects for a premium pharmacy feel
 
 ✅ Single‑file architecture – all logic is separated but easy to maintain
+```
 
-🧪 Future Enhancements
+## 🧪 Future Enhancements
+```
 Cloud sync with Firebase / Supabase
 
 Multi‑user real‑time collaboration
@@ -187,10 +197,12 @@ Email/SMS notifications for low stock
 Sales analytics and charts
 
 Expiry date reminders
+```
 
-🤝 Contributing
+## 🤝 Contributing
+
 Contributions are welcome! Please follow these steps:
-
+```
 Fork the repository
 
 Create a feature branch
@@ -206,20 +218,20 @@ Push to the branch
 bash
 git push origin feature/amazing-feature
 Open a Pull Request
-
-📄 License
+```
+## 📄 License
 This project is licensed under the MIT License – see the LICENSE file for details.
 
-🙏 Acknowledgments
+## 🙏 Acknowledgments
 Font Awesome – beautiful icons
 
 Tailwind CSS – rapid styling
 
 React – powerful component model
 
-📧 Contact
+## 📧 Contact
 SHIVAM SHAH – sahsujal72@gmail.com
-GitHub: CIPHER-SHIVAM
+GitHub:https://github.com/CIPHER-SHIVAM
 Live Demo: https://pharm-care.vercel.app/
 
 <p align="center">Made with ❤️ by <strong>SHIVAM SHAH</strong></p> <p align="center"> ⭐ Star this repository if you find it useful! </p>
