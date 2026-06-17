@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PharmaCare · Pharmacy Management</title>
+
+    <!-- Tailwind + Google Fonts + Icons -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- React + ReactDOM -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js">
+    </script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js">
+    </script>
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: #f4f7fc;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sidebar-glass {
+            background: rgba(10, 30, 60, 0.88);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 50, 0.2);
+        }
+        .nav-link {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
+        }
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: inset 4px 0 0 #60a5fa;
+        }
+        .table-row:hover {
+            background: #f8fafc;
+        }
+        .modal-overlay {
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes floatIcon1 {
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.2;
+            }
+            25% {
+                transform: translate(20px, -30px) rotate(10deg) scale(1.1);
+                opacity: 0.35;
+            }
+            50% {
+                transform: translate(-15px, -50px) rotate(-5deg) scale(0.9);
+                opacity: 0.25;
+            }
+            75% {
+                transform: translate(25px, -20px) rotate(15deg) scale(1.05);
+                opacity: 0.3;
+            }
+        }
+        @keyframes floatIcon2 {
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.15;
+            }
+            33% {
+                transform: translate(-25px, -40px) rotate(-12deg) scale(1.15);
+                opacity: 0.3;
+            }
+            66% {
+                transform: translate(20px, -25px) rotate(8deg) scale(0.85);
+                opacity: 0.2;
+            }
+        }
+        @keyframes floatIcon3 {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.1;
+            }
+            50% {
+                transform: translate(0, -60px) scale(1.2);
+                opacity: 0.25;
+            }
+        }
+        @keyframes floatCard {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes pulseRing {
+            0% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(96, 165, 250, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+            }
+        }
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+        .float-card {
+            animation: floatCard 4s ease-in-out infinite;
+        }
+        .pulse-ring {
+            animation: pulseRing 2s ease-out infinite;
+        }
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 12s linear infinite;
+        }
+        .copyright-text {
+            color: rgba(255, 255, 255, 0.75);
+            text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+        .copyright-text:hover {
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.6);
+        }
+        .login-bg {
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 40%, #0d1f3c 70%, #0a1628 100%);
+        }
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        .stock-value-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.2));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .stock-value-card .value {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .floating-icon {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.15;
+            font-size: 2.5rem;
+        }
+        .floating-icon:nth-child(odd) {
+            animation: floatIcon1 8s ease-in-out infinite;
+        }
+        .floating-icon:nth-child(3n) {
+            animation: floatIcon2 10s ease-in-out infinite;
+        }
+        .floating-icon:nth-child(5n+2) {
+            animation: floatIcon3 7s ease-in-out infinite;
+        }
+        .glow-dot {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.08), transparent 70%);
+        }
+        .login-left-panel {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(139, 92, 246, 0.15));
+            backdrop-filter: blur(4px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-receipt {
+                background: white !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            body {
+                background: white !important;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef2f7;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c4de;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="root">
+        <div class="flex items-center justify-center min-h-screen text-gray-500">
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin text-3xl text-blue-500 mb-4"></i>
+                <p>Loading PharmaCare...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+                document.getElementById('root').innerHTML = `
+                    <div class="flex items-center justify-center min-h-screen text-red-600 p-6">
+                        <div class="bg-white/80 backdrop-blur rounded-2xl p-8 max-w-lg shadow-xl">
+                            <h2 class="text-xl font-bold mb-2">React failed to load</h2>
+                            <p class="text-sm text-gray-600">Check your internet connection and reload.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const { useState, useEffect, useMemo, createContext, useContext } = React;
+
+            // ─── Constants ────────────────────────────────────────────────
+            const STORAGE_KEY = 'pharmaCare_data';
+            const AUTH_KEY = 'pharmaCare_auth';
+
+            const defaultMedicines = [{
+                id: 'med1',
+                name: 'Paracetamol 500mg',
+                company: 'Cipla',
+                type: 'Tablet',
+                quantity: 100,
+                price: 50,
+                expiryDate: '2026-12-31'
+            }, {
+                id: 'med2',
+                name: 'Amoxicillin 250mg',
+                company: 'GSK',
+                type: 'Capsule',
+                quantity: 50,
+                price: 120,
+                expiryDate: '2026-08-15'
+            }, {
+                id: 'med3',
+                name: 'Cetirizine 10mg',
+                company: 'Sun Pharma',
+                type: 'Tablet',
+                quantity: 200,
+                price: 30,
+                expiryDate: '2027-01-10'
+            }, {
+                id: 'med4',
+                name: 'Ibuprofen 400mg',
+                company: 'Dr. Reddy\'s',
+                type: 'Tablet',
+                quantity: 75,
+                price: 80,
+                expiryDate: '2026-07-20'
+            }, {
+                id: 'med5',
+                name: 'Azithromycin 500mg',
+                company: 'Zydus',
+                type: 'Tablet',
+                quantity: 40,
+                price: 250,
+                expiryDate: '2026-09-05'
+            }, {
+                id: 'med6',
+                name: 'Metformin 500mg',
+                company: 'USV',
+                type: 'Tablet',
+                quantity: 150,
+                price: 60,
+                expiryDate: '2026-11-01'
+            }, {
+                id: 'med7',
+                name: 'Amlodipine 5mg',
+                company: 'Torrent',
+                type: 'Tablet',
+                quantity: 90,
+                price: 45,
+                expiryDate: '2026-10-15'
+            }, {
+                id: 'med8',
+                name: 'Omeprazole 20mg',
+                company: 'AstraZeneca',
+                type: 'Capsule',
+                quantity: 60,
+                price: 70,
+                expiryDate: '2027-02-20'
+            }, {
+                id: 'med9',
+                name: 'Losartan 50mg',
+                company: 'Novartis',
+                type: 'Tablet',
+                quantity: 80,
+                price: 55,
+                expiryDate: '2026-12-01'
+            }, {
+                id: 'med10',
+                name: 'Atorvastatin 10mg',
+                company: 'Pfizer',
+                type: 'Tablet',
+                quantity: 45,
+                price: 95,
+                expiryDate: '2026-08-30'
+            }, {
+                id: 'med11',
+                name: 'Salbutamol Inhaler',
+                company: 'Cipla',
+                type: 'Liquid',
+                quantity: 30,
+                price: 280,
+                expiryDate: '2026-06-25'
+            }, {
+                id: 'med12',
+                name: 'Ciprofloxacin 500mg',
+                company: 'Bayer',
+                type: 'Tablet',
+                quantity: 35,
+                price: 110,
+                expiryDate: '2026-07-10'
+            }, {
+                id: 'med13',
+                name: 'Fluconazole 150mg',
+                company: 'Pfizer',
+                type: 'Capsule',
+                quantity: 25,
+                price: 180,
+                expiryDate: '2026-06-20'
+            }, {
+                id: 'med14',
+                name: 'Paracetamol Syrup 120ml',
+                company: 'Cipla',
+                type: 'Liquid',
+                quantity: 60,
+                price: 90,
+                expiryDate: '2026-09-12'
+            }, {
+                id: 'med15',
+                name: 'Cetrimide Cream',
+                company: 'GSK',
+                type: 'Cream',
+                quantity: 40,
+                price: 150,
+                expiryDate: '2026-05-30'
+            }];
+
+            function loadData() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (parsed && Array.isArray(parsed.medicines) && parsed.medicines.length > 0) {
+                            return parsed;
+                        }
+                    }
+                } catch (_) {}
+                return { medicines: defaultMedicines, orders: [] };
+            }
+
+            function saveData(data) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            function loadAuth() {
+                return { user: null, role: null };
+            }
+
+            function saveAuth(auth) {
+                localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
+            }
+
+            function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+            function formatDate(iso) {
+                if (!iso) return '—';
+                const d = new Date(iso + 'T00:00:00');
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            }
+
+            function isExpired(iso) {
+                return new Date(iso + 'T00:00:00') < new Date();
+            }
+
+            function daysUntil(iso) {
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                const exp = new Date(iso + 'T00:00:00');
+                return Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+            }
+
+            function isLowStock(qty, threshold = 10) { return qty <= threshold; }
+
+            function currency(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+
+            // ─── Context ──────────────────────────────────────────────────
+            const AppContext = createContext(null);
+
+            function AppProvider({ children }) {
+                const [data, setData] = useState(() => loadData());
+                const [auth, setAuth] = useState(() => loadAuth());
+                const [darkMode, setDarkMode] = useState(false);
+                const [currentPage, setCurrentPage] = useState('dashboard');
+                const [notification, setNotification] = useState(null);
+
+                useEffect(() => {
+                    saveData(data);
+                }, [data]);
+
+                useEffect(() => {
+                    saveAuth(auth);
+                }, [auth]);
+
+                useEffect(() => {
+                    const medicines = data.medicines || [];
+                    const lowStock = medicines.filter(m => isLowStock(m.quantity));
+                    const expired = medicines.filter(m => isExpired(m.expiryDate));
+                    const expiringSoon = medicines.filter(m => {
+                        const d = daysUntil(m.expiryDate);
+                        return d > 0 && d <= 7;
+                    });
+
+                    let msg = '';
+                    if (lowStock.length > 0) msg += `${lowStock.length} low stock items. `;
+                    if (expired.length > 0) msg += `${expired.length} expired items. `;
+                    if (expiringSoon.length > 0) msg += `${expiringSoon.length} items expiring within 7 days.`;
+
+                    if (msg) {
+                        setNotification({ message: msg, type: 'warning' });
+                        const timer = setTimeout(() => setNotification(null), 8000);
+                        return () => clearTimeout(timer);
+                    } else {
+                        setNotification(null);
+                    }
+                }, [data.medicines]);
+
+                const addMedicine = (med) => {
+                    const newMed = { ...med, id: generateId() };
+                    setData(prev => ({
+                        ...prev,
+                        medicines: [...prev.medicines, newMed],
+                    }));
+                    return newMed;
+                };
+
+                const updateMedicine = (id, updates) => {
+                    setData(prev => ({
+                        ...prev,
+                        medicines: prev.medicines.map(m => m.id === id ? { ...m, ...updates } : m)
+                    }));
+                };
+
+                const deleteMedicine = (id) => {
+                    if (!window.confirm('Delete this medicine permanently?')) return;
+                    setData(prev => ({
+                        ...prev,
+                        medicines: prev.medicines.filter(m => m.id !== id)
+                    }));
+                };
+
+                const addOrder = (items) => {
+                    const total = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
+                    const order = {
+                        id: generateId(),
+                        items: items.map(it => ({ ...it })),
+                        total,
+                        date: new Date().toISOString(),
+                        status: 'completed'
+                    };
+                    setData(prev => {
+                        const newMedicines = prev.medicines.map(m => {
+                            const found = items.find(it => it.medicineId === m.id);
+                            if (found) {
+                                return { ...m, quantity: Math.max(0, m.quantity - found.quantity) };
+                            }
+                            return m;
+                        });
+                        return {
+                            ...prev,
+                            medicines: newMedicines,
+                            orders: [...prev.orders, order]
+                        };
+                    });
+                    return order;
+                };
+
+                const deleteOrder = (id) => {
+                    if (!window.confirm('Delete this order?')) return;
+                    setData(prev => ({
+                        ...prev,
+                        orders: prev.orders.filter(o => o.id !== id)
+                    }));
+                };
+
+                const login = (username, password, role) => {
+                    if (role === 'admin' && username === 'admin' && password === 'admin123') {
+                        setAuth({ user: username, role: 'admin' });
+                        return true;
+                    } else if (role === 'staff' && username === 'staff' && password === 'staff123') {
+                        setAuth({ user: username, role: 'staff' });
+                        return true;
+                    }
+                    return false;
+                };
+
+                const logout = () => {
+                    setAuth({ user: null, role: null });
+                    setCurrentPage('dashboard');
+                };
+
+                const totalStockValue = useMemo(() => {
+                    return (data.medicines || []).reduce((sum, m) => sum + (m.quantity * m.price), 0);
+                }, [data.medicines]);
+
+                const value = {
+                    data,
+                    setData,
+                    auth,
+                    login,
+                    logout,
+                    darkMode,
+                    setDarkMode,
+                    currentPage,
+                    setCurrentPage,
+                    addMedicine,
+                    updateMedicine,
+                    deleteMedicine,
+                    addOrder,
+                    deleteOrder,
+                    isAdmin: auth.role === 'admin',
+                    isStaff: auth.role === 'staff',
+                    isAuthenticated: !!auth.user,
+                    userRole: auth.role || null,
+                    userName: auth.user || null,
+                    totalStockValue,
+                    notification,
+                };
+
+                return React.createElement(AppContext.Provider, { value }, children);
+            }
+
+            function useApp() {
+                const ctx = useContext(AppContext);
+                if (!ctx) throw new Error('useApp must be used within AppProvider');
+                return ctx;
+            }
+
+            const Icon = ({ name, className = '' }) => {
+                return React.createElement('i', { className: `fas fa-${name} ${className}` });
+            };
+
+            // ─── Login Page ──────────────────────────────────────────────
+            function LoginPage() {
+                const { login } = useApp();
+                const [username, setUsername] = useState('');
+                const [password, setPassword] = useState('');
+                const [role, setRole] = useState('staff');
+                const [error, setError] = useState('');
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    setError('');
+                    if (!username.trim() || !password.trim()) {
+                        setError('Please fill in all fields.');
+                        return;
+                    }
+                    const success = login(username, password, role);
+                    if (!success) {
+                        setError('Invalid credentials. Please try again.');
+                    }
+                };
+
+                const currentYear = new Date().getFullYear();
+
+                // Medical icons for background
+                const medicalIcons = [
+                    'capsules', 'pills', 'syringe', 'heartbeat', 'band-aid',
+                    'tablets', 'vial', 'prescription-bottle', 'x-ray', 'clinic-medical',
+                    'stethoscope', 'ambulance', 'bone', 'brain', 'tooth',
+                    'dna', 'hospital', 'microscope', 'heart', 'lungs',
+                    'eye', 'ear', 'teeth', 'joint', 'flask',
+                    'droplet', 'thermometer', 'weight-scale', 'heart-pulse',
+                    'crutch', 'wheelchair', 'medical', 'user-md', 'user-nurse',
+                    'blender-phone', 'briefcase-medical', 'clock', 'calendar-check'
+                ];
+
+                return React.createElement('div', { className: 'login-bg min-h-screen flex items-center justify-center p-4 relative overflow-hidden' },
+                    // Background glow dots
+                    React.createElement('div', { className: 'absolute inset-0 overflow-hidden pointer-events-none' },
+                        Array.from({ length: 15 }, (_, i) => {
+                            const size = 60 + Math.random() * 180;
+                            const style = {
+                                width: size + 'px',
+                                height: size + 'px',
+                                top: (i * 7 + 2) % 100 + '%',
+                                left: (i * 11 + 5) % 100 + '%',
+                                background: `radial-gradient(circle, rgba(${96 + i * 10}, ${165 + i * 5}, ${250 - i * 8}, ${0.04 + i * 0.005}), transparent 70%)`,
+                            };
+                            return React.createElement('div', { key: i, className: 'glow-dot', style: style });
+                        })
+                    ),
+                    // Floating icons background
+                    React.createElement('div', { className: 'absolute inset-0 overflow-hidden pointer-events-none' },
+                        medicalIcons.map((name, i) => {
+                            const style = {
+                                top: 3 + (i * 5 + 7) % 92 + '%',
+                                left: 2 + (i * 9 + 11) % 96 + '%',
+                                animationDelay: (i * 0.6 + 1) % 6 + 's',
+                                animationDuration: (7 + (i % 5)) + 's',
+                                fontSize: (2 + (i % 4) * 0.5) + 'rem',
+                                color: ['#60a5fa', '#34d399', '#a78bfa', '#f472b6', '#fbbf24', '#f87171', '#38bdf8', '#e879f9'][
+                                    i % 8
+                                ],
+                                opacity: 0.12 + (i % 5) * 0.03,
+                            };
+                            return React.createElement(Icon, {
+                                key: i,
+                                name: name,
+                                className: 'floating-icon',
+                                style: style
+                            });
+                        })
+                    ),
+                    // Main login card with split layout
+                    React.createElement('div', { className: 'glass-card rounded-3xl w-full max-w-4xl shadow-2xl border-0 relative z-10 float-card overflow-hidden flex flex-col md:flex-row' },
+                        // Left Panel - Logo & Branding
+                        React.createElement('div', { className: 'login-left-panel w-full md:w-2/5 p-8 flex flex-col items-center justify-center text-white relative overflow-hidden' },
+                            // Inner floating icons (subtle)
+                            React.createElement('div', { className: 'absolute inset-0 overflow-hidden pointer-events-none' },
+                                ['capsules', 'pills', 'syringe', 'heartbeat', 'stethoscope'].map((name, i) => {
+                                    const style = {
+                                        top: (i * 20 + 10) % 90 + '%',
+                                        left: (i * 25 + 5) % 90 + '%',
+                                        fontSize: (1.5 + i * 0.5) + 'rem',
+                                        opacity: 0.15,
+                                        color: 'white',
+                                        animationDelay: (i * 0.5) + 's',
+                                        animationDuration: (6 + i) + 's',
+                                    };
+                                    return React.createElement(Icon, {
+                                        key: i,
+                                        name: name,
+                                        className: 'floating-icon',
+                                        style: style
+                                    });
+                                })
+                            ),
+                            // Main Logo
+                            React.createElement('div', { className: 'relative z-10 text-center' },
+                                React.createElement('div', { className: 'w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 flex items-center justify-center text-white text-6xl mx-auto shadow-2xl shadow-blue-500/30 pulse-ring' },
+                                    React.createElement(Icon, { name: 'heartbeat' })
+                                ),
+                                React.createElement('h2', { className: 'text-3xl font-bold mt-6 tracking-tight text-white drop-shadow-lg' }, 'PharmaCare'),
+                                React.createElement('p', { className: 'text-sm text-white/70 mt-2 max-w-xs mx-auto' },
+                                    'Smart Pharmacy Management System'
+                                ),
+                                React.createElement('div', { className: 'mt-6 flex justify-center gap-2 text-white/40 text-xs' },
+                                    React.createElement('span', { className: 'w-1.5 h-1.5 rounded-full bg-white/50' }),
+                                    React.createElement('span', { className: 'w-1.5 h-1.5 rounded-full bg-white/30' }),
+                                    React.createElement('span', { className: 'w-1.5 h-1.5 rounded-full bg-white/20' })
+                                )
+                            )
+                        ),
+                        // Right Panel - Form
+                        React.createElement('div', { className: 'w-full md:w-3/5 p-8 md:p-10' },
+                            React.createElement('div', { className: 'mb-6' },
+                                React.createElement('h3', { className: 'text-2xl font-bold text-gray-800' }, 'Welcome Back'),
+                                React.createElement('p', { className: 'text-sm text-gray-500 mt-1' }, 'Sign in to your account')
+                            ),
+                            React.createElement('form', { onSubmit: handleSubmit, className: 'space-y-4' },
+                                React.createElement('div', null,
+                                    React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Role'),
+                                    React.createElement('select', {
+                                        value: role,
+                                        onChange: (e) => setRole(e.target.value),
+                                        className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm focus:border-blue-400 transition'
+                                    },
+                                        React.createElement('option', { value: 'staff' }, 'Staff'),
+                                        React.createElement('option', { value: 'admin' }, 'Admin')
+                                    )
+                                ),
+                                React.createElement('div', null,
+                                    React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Username'),
+                                    React.createElement('input', {
+                                        type: 'text',
+                                        value: username,
+                                        onChange: (e) => setUsername(e.target.value),
+                                        placeholder: 'Enter username',
+                                        className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm focus:border-blue-400 transition'
+                                    })
+                                ),
+                                React.createElement('div', null,
+                                    React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Password'),
+                                    React.createElement('input', {
+                                        type: 'password',
+                                        value: password,
+                                        onChange: (e) => setPassword(e.target.value),
+                                        placeholder: 'Enter password',
+                                        className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm focus:border-blue-400 transition'
+                                    })
+                                ),
+                                error && React.createElement('p', { className: 'text-sm text-rose-600 bg-rose-50 px-3 py-2 rounded-lg' }, error),
+                                React.createElement('button', {
+                                    type: 'submit',
+                                    className: 'w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition hover:scale-[1.01]'
+                                }, 'Sign In')
+                            ),
+                            // Copyright inside right panel (marquee)
+                            React.createElement('div', { className: 'mt-6 pt-4 border-t border-gray-200/50 marquee-container' },
+                                React.createElement('p', { className: 'text-xs text-gray-400 marquee-text font-medium tracking-wide' },
+                                    '© ' + currentYear + ' PharmaCare · All Rights Reserved · Secure & Reliable'
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+
+            // ─── Notification Banner ─────────────────────────────────────
+            function NotificationBanner() {
+                const { notification } = useApp();
+                if (!notification) return null;
+
+                return React.createElement('div', { className: 'mb-4 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-3 text-amber-700 text-sm' },
+                    React.createElement(Icon, { name: 'exclamation-circle', className: 'text-amber-500' }),
+                    React.createElement('span', { className: 'flex-1' }, notification.message),
+                    React.createElement('span', { className: 'text-amber-400 text-xs font-medium' }, '⚠ Action Required')
+                );
+            }
+
+            // ─── Sidebar ──────────────────────────────────────────────────
+            function Sidebar() {
+                const { currentPage, setCurrentPage, darkMode, setDarkMode, logout, isAdmin, userRole, userName } =
+                useApp();
+                const items = [
+                    { key: 'dashboard', label: 'Dashboard', icon: 'th-large' },
+                    { key: 'medicines', label: 'Medicines', icon: 'pills' },
+                    { key: 'orders', label: 'Orders', icon: 'shopping-cart' },
+                ];
+
+                const roleDisplay = userRole === 'admin' ? 'Administrator' : 'Staff Member';
+                const roleColor = userRole === 'admin' ? 'from-purple-500 to-indigo-500' : 'from-emerald-500 to-teal-500';
+                const roleIcon = userRole === 'admin' ? 'crown' : 'user-shield';
+
+                return React.createElement('aside', { className: 'sidebar-glass w-[72px] md:w-[230px] min-h-screen flex-shrink-0 fixed md:relative z-30 flex flex-col transition-all duration-300' },
+                    React.createElement('div', { className: 'flex items-center justify-center md:justify-start gap-2 px-4 h-16 border-b border-white/5' },
+                        React.createElement('div', { className: 'w-8 h-8 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-500/25' },
+                            React.createElement(Icon, { name: 'heartbeat', className: 'text-lg' })
+                        ),
+                        React.createElement('span', { className: 'hidden md:block text-white font-bold text-lg' },
+                            'Pharma', React.createElement('span', { className: 'text-blue-300' }, 'Care')
+                        )
+                    ),
+                    React.createElement('div', { className: 'mx-2 my-3 p-2.5 rounded-xl bg-white/5 border border-white/10 hidden md:block' },
+                        React.createElement('div', { className: 'flex items-center gap-2.5' },
+                            React.createElement('div', { className: `w-8 h-8 rounded-full bg-gradient-to-br ${roleColor} flex items-center justify-center text-white text-xs shadow-lg` },
+                                React.createElement(Icon, { name: roleIcon })
+                            ),
+                            React.createElement('div', { className: 'flex-1 min-w-0' },
+                                React.createElement('p', { className: 'text-white text-xs font-medium truncate' }, userName || 'User'),
+                                React.createElement('p', { className: `text-[10px] font-semibold uppercase tracking-wider ${userRole === 'admin' ? 'text-purple-300' : 'text-emerald-300'}` },
+                                    roleDisplay
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'md:hidden flex items-center justify-center py-2' },
+                        React.createElement('div', { className: `w-6 h-6 rounded-full bg-gradient-to-br ${roleColor} flex items-center justify-center text-white text-xs` },
+                            React.createElement(Icon, { name: roleIcon })
+                        )
+                    ),
+                    React.createElement('nav', { className: 'flex-1 px-2 py-2 space-y-1' },
+                        items.map(({ key, label, icon }) =>
+                            React.createElement('button', {
+                                key: key,
+                                onClick: () => setCurrentPage(key),
+                                className: `nav-link w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition ${currentPage === key ? 'active text-white' : 'text-white/60 hover:text-white'}`
+                            },
+                                React.createElement(Icon, { name: icon, className: 'w-5 text-center' }),
+                                React.createElement('span', { className: 'hidden md:inline' }, label)
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'p-3 border-t border-white/5 space-y-1.5' },
+                        React.createElement('button', {
+                            onClick: () => setDarkMode(!darkMode),
+                            className: 'w-full flex items-center gap-3 px-3 py-2 text-sm text-white/50 hover:text-white transition rounded-xl hover:bg-white/5'
+                        },
+                            React.createElement(Icon, { name: darkMode ? 'sun' : 'moon', className: 'w-5' }),
+                            React.createElement('span', { className: 'hidden md:inline' }, darkMode ? 'Light' : 'Dark')
+                        ),
+                        React.createElement('button', {
+                            onClick: logout,
+                            className: 'w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-300/60 hover:text-rose-300 transition rounded-xl hover:bg-white/5'
+                        },
+                            React.createElement(Icon, { name: 'sign-out-alt', className: 'w-5' }),
+                            React.createElement('span', { className: 'hidden md:inline' }, 'Logout')
+                        )
+                    )
+                );
+            }
+
+            // ─── Stat Card ───────────────────────────────────────────────
+            function StatCard({ title, value, icon, color, subtitle, trend }) {
+                return React.createElement('div', { className: 'stat-card glass-card rounded-2xl p-5 flex items-center gap-4 shadow-sm' },
+                    React.createElement('div', { className: `w-12 h-12 rounded-xl flex items-center justify-center text-xl ${color} shadow-lg` },
+                        React.createElement(Icon, { name: icon })
+                    ),
+                    React.createElement('div', { className: 'flex-1' },
+                        React.createElement('p', { className: 'text-xs font-medium text-gray-500 uppercase tracking-wider' }, title),
+                        React.createElement('p', { className: 'text-2xl font-bold text-gray-800' }, value),
+                        subtitle && React.createElement('p', { className: 'text-xs text-gray-400 mt-0.5' }, subtitle)
+                    ),
+                    trend && React.createElement('div', { className: `text-xs font-semibold ${trend > 0 ? 'text-emerald-600' : 'text-rose-600'} bg-${trend > 0 ? 'emerald' : 'rose'}-50 px-2 py-1 rounded-full` },
+                        trend > 0 ? '↑' : '↓', ' ', Math.abs(trend), '%'
+                    )
+                );
+            }
+
+            // ─── Dashboard ───────────────────────────────────────────────
+            function Dashboard() {
+                const { data, totalStockValue } = useApp();
+                const medicines = data.medicines || [];
+                const orders = data.orders || [];
+
+                const totalMedicines = medicines.length;
+                const totalOrders = orders.length;
+                const lowStockItems = medicines.filter(m => isLowStock(m.quantity));
+                const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+                const expiredItems = medicines.filter(m => isExpired(m.expiryDate));
+                const expiringSoon = medicines.filter(m => {
+                    const d = daysUntil(m.expiryDate);
+                    return d > 0 && d <= 30;
+                });
+                const totalItems = medicines.reduce((sum, m) => sum + m.quantity, 0);
+                const avgPrice = totalMedicines > 0 ? medicines.reduce((sum, m) => sum + m.price, 0) / totalMedicines : 0;
+
+                const recentOrders = [...orders].reverse().slice(0, 5);
+                const topMedicines = [...medicines].sort((a, b) => (b.quantity * b.price) - (a.quantity * a.price)).slice(0, 5);
+
+                return React.createElement('div', { className: 'space-y-6' },
+                    React.createElement(NotificationBanner, null),
+                    React.createElement('div', null,
+                        React.createElement('h1', { className: 'text-2xl font-bold text-gray-800' }, 'Dashboard'),
+                        React.createElement('p', { className: 'text-gray-500 text-sm' }, 'Overview of your pharmacy inventory and orders')
+                    ),
+                    React.createElement('div', { className: 'stock-value-card rounded-2xl p-6 shadow-sm flex items-center justify-between' },
+                        React.createElement('div', { className: 'flex items-center gap-4' },
+                            React.createElement('div', { className: 'w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/25' },
+                                React.createElement(Icon, { name: 'coins' })
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('p', { className: 'text-xs font-medium text-emerald-700/70 uppercase tracking-wider' }, 'Total Stock Value'),
+                                React.createElement('p', { className: 'text-3xl font-bold value' }, currency(totalStockValue))
+                            )
+                        ),
+                        React.createElement('div', { className: 'text-right text-xs text-emerald-600/60' },
+                            React.createElement('p', null, totalItems, ' units total'),
+                            React.createElement('p', null, totalMedicines, ' products')
+                        )
+                    ),
+                    React.createElement('div', { className: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4' },
+                        React.createElement(StatCard, { title: 'Total Medicines', value: totalMedicines, icon: 'box', color: 'bg-blue-50 text-blue-600' }),
+                        React.createElement(StatCard, { title: 'Total Orders', value: totalOrders, icon: 'receipt', color: 'bg-emerald-50 text-emerald-600' }),
+                        React.createElement(StatCard, { title: 'Revenue', value: currency(totalRevenue), icon: 'tag', color: 'bg-amber-50 text-amber-600', subtitle: `${totalOrders} orders` }),
+                        React.createElement(StatCard, { title: 'Low Stock', value: lowStockItems.length, icon: 'exclamation-triangle', color: 'bg-rose-50 text-rose-600', subtitle: lowStockItems.length > 0 ? 'Needs attention' : 'All stocked' })
+                    ),
+                    React.createElement('div', { className: 'grid grid-cols-1 sm:grid-cols-3 gap-4' },
+                        React.createElement(StatCard, { title: 'Total Units', value: totalItems.toLocaleString(), icon: 'cubes', color: 'bg-indigo-50 text-indigo-600' }),
+                        React.createElement(StatCard, { title: 'Average Price', value: currency(Math.round(avgPrice)), icon: 'chart-line', color: 'bg-purple-50 text-purple-600' }),
+                        React.createElement(StatCard, { title: 'Expired Items', value: expiredItems.length, icon: 'clock', color: 'bg-rose-50 text-rose-600', subtitle: expiredItems.length > 0 ? 'Remove soon' : 'All valid' })
+                    ),
+                    React.createElement('div', { className: 'grid grid-cols-1 lg:grid-cols-2 gap-6' },
+                        React.createElement('div', { className: 'glass-card rounded-2xl p-5 shadow-sm' },
+                            React.createElement('h3', { className: 'font-semibold text-gray-700 flex items-center gap-2 mb-3' },
+                                React.createElement('span', { className: 'w-2 h-2 rounded-full bg-rose-400' }),
+                                'Alerts'
+                            ),
+                            (lowStockItems.length === 0 && expiringSoon.length === 0 && expiredItems.length === 0) ?
+                            React.createElement('p', { className: 'text-sm text-gray-400 py-4 text-center' }, '✓ No alerts') :
+                            React.createElement('div', { className: 'space-y-3' },
+                                lowStockItems.length > 0 && React.createElement('div', null,
+                                    React.createElement('p', { className: 'text-xs font-medium text-rose-600 mb-1' }, 'Low Stock'),
+                                    lowStockItems.slice(0, 4).map(m =>
+                                        React.createElement('div', { key: m.id, className: 'flex items-center justify-between py-1 border-b border-gray-100' },
+                                            React.createElement('span', { className: 'text-sm text-gray-700' }, m.name),
+                                            React.createElement('span', { className: 'text-sm font-semibold text-rose-600' }, m.quantity)
+                                        )
+                                    )
+                                ),
+                                (expiredItems.length > 0 || expiringSoon.length > 0) && React.createElement('div', null,
+                                    React.createElement('p', { className: 'text-xs font-medium text-amber-600 mb-1' }, 'Expiry'),
+                                    [...expiredItems, ...expiringSoon].slice(0, 4).map(m =>
+                                        React.createElement('div', { key: m.id, className: 'flex items-center justify-between py-1 border-b border-gray-100' },
+                                            React.createElement('span', { className: 'text-sm text-gray-700' }, m.name),
+                                            React.createElement('span', { className: `text-sm font-semibold ${isExpired(m.expiryDate) ? 'text-rose-600' : 'text-amber-600'}` },
+                                                isExpired(m.expiryDate) ? 'Expired' : daysUntil(m.expiryDate) + 'd'
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: 'glass-card rounded-2xl p-5 shadow-sm' },
+                            React.createElement('h3', { className: 'font-semibold text-gray-700 flex items-center gap-2 mb-3' },
+                                React.createElement('span', { className: 'w-2 h-2 rounded-full bg-emerald-400' }),
+                                'Top Medicines by Value'
+                            ),
+                            topMedicines.length === 0 ?
+                            React.createElement('p', { className: 'text-sm text-gray-400 py-4 text-center' }, 'No medicines') :
+                            React.createElement('div', { className: 'space-y-2' },
+                                topMedicines.map(m =>
+                                    React.createElement('div', { key: m.id, className: 'flex items-center justify-between py-2 border-b border-gray-100' },
+                                        React.createElement('div', null,
+                                            React.createElement('p', { className: 'font-medium text-gray-700 text-sm' }, m.name),
+                                            React.createElement('p', { className: 'text-xs text-gray-400' }, m.company)
+                                        ),
+                                        React.createElement('span', { className: 'text-sm font-semibold text-emerald-600' }, currency(m.quantity * m.price))
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'glass-card rounded-2xl p-5 shadow-sm' },
+                        React.createElement('h3', { className: 'font-semibold text-gray-700 flex items-center gap-2 mb-3' },
+                            React.createElement('span', { className: 'w-2 h-2 rounded-full bg-blue-400' }),
+                            'Recent Orders'
+                        ),
+                        recentOrders.length === 0 ?
+                        React.createElement('p', { className: 'text-sm text-gray-400 py-4 text-center' }, 'No orders yet') :
+                        React.createElement('div', { className: 'overflow-x-auto' },
+                            React.createElement('table', { className: 'w-full text-sm' },
+                                React.createElement('thead', null,
+                                    React.createElement('tr', { className: 'text-gray-500 text-xs uppercase tracking-wider' },
+                                        React.createElement('th', { className: 'px-3 py-2 text-left' }, 'Order ID'),
+                                        React.createElement('th', { className: 'px-3 py-2 text-left' }, 'Date'),
+                                        React.createElement('th', { className: 'px-3 py-2 text-right' }, 'Items'),
+                                        React.createElement('th', { className: 'px-3 py-2 text-right' }, 'Total')
+                                    )
+                                ),
+                                React.createElement('tbody', null,
+                                    recentOrders.map(o =>
+                                        React.createElement('tr', { key: o.id, className: 'border-b border-gray-100' },
+                                            React.createElement('td', { className: 'px-3 py-2 font-mono text-xs text-gray-600' }, '#' + o.id.slice(0, 8).toUpperCase()),
+                                            React.createElement('td', { className: 'px-3 py-2 text-gray-600' }, new Date(o.date).toLocaleDateString()),
+                                            React.createElement('td', { className: 'px-3 py-2 text-right' }, o.items.reduce((s, it) => s + it.quantity, 0) + ' items'),
+                                            React.createElement('td', { className: 'px-3 py-2 text-right font-bold' }, currency(o.total))
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+
+            // ─── Medicines ──────────────────────────────────────────────
+            function Medicines() {
+                const { data, addMedicine, updateMedicine, deleteMedicine, isAdmin } = useApp();
+                const medicines = data.medicines || [];
+
+                const [search, setSearch] = useState('');
+                const [filterType, setFilterType] = useState('all');
+                const [showModal, setShowModal] = useState(false);
+                const [editingId, setEditingId] = useState(null);
+                const [formData, setFormData] = useState({
+                    name: '',
+                    company: '',
+                    type: 'Tablet',
+                    quantity: 0,
+                    price: 0,
+                    expiryDate: '',
+                });
+
+                const filtered = useMemo(() => {
+                    let list = medicines;
+                    if (search.trim()) {
+                        const s = search.trim().toLowerCase();
+                        list = list.filter(m => m.name.toLowerCase().includes(s) || m.company.toLowerCase().includes(s));
+                    }
+                    if (filterType !== 'all') list = list.filter(m => m.type === filterType);
+                    return list;
+                }, [medicines, search, filterType]);
+
+                const openModal = (med = null) => {
+                    if (!isAdmin) {
+                        alert('Only Admin can add/edit medicines.');
+                        return;
+                    }
+                    if (med) {
+                        setEditingId(med.id);
+                        setFormData({ ...med });
+                    } else {
+                        setEditingId(null);
+                        setFormData({ name: '', company: '', type: 'Tablet', quantity: 0, price: 0, expiryDate: '' });
+                    }
+                    setShowModal(true);
+                };
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    if (!formData.name.trim() || !formData.company.trim() || !formData.expiryDate) {
+                        alert('Please fill all required fields.');
+                        return;
+                    }
+                    if (formData.quantity < 0 || formData.price < 0) {
+                        alert('Quantity and price must be non-negative.');
+                        return;
+                    }
+                    if (editingId) {
+                        updateMedicine(editingId, formData);
+                    } else {
+                        addMedicine(formData);
+                    }
+                    setShowModal(false);
+                };
+
+                const handleDelete = (id) => {
+                    if (!isAdmin) {
+                        alert('Only Admin can delete medicines.');
+                        return;
+                    }
+                    deleteMedicine(id);
+                };
+
+                return React.createElement('div', { className: 'space-y-5' },
+                    React.createElement(NotificationBanner, null),
+                    React.createElement('div', { className: 'flex flex-col sm:flex-row sm:items-center justify-between gap-3' },
+                        React.createElement('div', null,
+                            React.createElement('h1', { className: 'text-2xl font-bold text-gray-800' }, 'Medicines'),
+                            React.createElement('p', { className: 'text-gray-500 text-sm' }, medicines.length + ' products in stock')
+                        ),
+                        React.createElement('button', {
+                            onClick: () => openModal(),
+                            className: `flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg transition hover:scale-[1.02] ${isAdmin ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-blue-500/25 hover:shadow-blue-500/40' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`,
+                            disabled: !isAdmin,
+                            title: isAdmin ? 'Add Medicine' : 'Admin only'
+                        },
+                            React.createElement(Icon, { name: 'plus' }),
+                            'Add Medicine'
+                        )
+                    ),
+                    React.createElement('div', { className: 'flex flex-col sm:flex-row gap-3' },
+                        React.createElement('div', { className: 'relative flex-1' },
+                            React.createElement('span', { className: 'absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm' },
+                                React.createElement(Icon, { name: 'search' })
+                            ),
+                            React.createElement('input', {
+                                type: 'text',
+                                placeholder: 'Search by name or company...',
+                                value: search,
+                                onChange: (e) => setSearch(e.target.value),
+                                className: 'w-full pl-9 pr-4 py-2.5 bg-white/70 backdrop-blur rounded-xl border border-gray-200/60 text-sm focus:border-blue-400'
+                            })
+                        ),
+                        React.createElement('select', {
+                            value: filterType,
+                            onChange: (e) => setFilterType(e.target.value),
+                            className: 'px-4 py-2.5 bg-white/70 backdrop-blur rounded-xl border border-gray-200/60 text-sm focus:border-blue-400 min-w-[130px]'
+                        },
+                            React.createElement('option', { value: 'all' }, 'All Types'),
+                            React.createElement('option', { value: 'Tablet' }, 'Tablet'),
+                            React.createElement('option', { value: 'Capsule' }, 'Capsule'),
+                            React.createElement('option', { value: 'Liquid' }, 'Liquid'),
+                            React.createElement('option', { value: 'Cream' }, 'Cream')
+                        )
+                    ),
+                    React.createElement('div', { className: 'glass-card rounded-2xl overflow-hidden shadow-sm' },
+                        React.createElement('div', { className: 'overflow-x-auto' },
+                            React.createElement('table', { className: 'w-full text-sm' },
+                                React.createElement('thead', null,
+                                    React.createElement('tr', { className: 'bg-gray-50/80 text-gray-600 text-xs uppercase tracking-wider' },
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold' }, 'Name'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold hidden sm:table-cell' }, 'Company'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold hidden md:table-cell' }, 'Type'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-right font-semibold' }, 'Qty'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-right font-semibold hidden sm:table-cell' }, 'Price'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold hidden lg:table-cell' }, 'Expiry'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-center font-semibold' }, 'Actions')
+                                    )
+                                ),
+                                React.createElement('tbody', { className: 'divide-y divide-gray-100' },
+                                    filtered.length === 0 ?
+                                    React.createElement('tr', null,
+                                        React.createElement('td', { colSpan: '7', className: 'px-4 py-10 text-center text-gray-400' }, 'No medicines found')
+                                    ) :
+                                    filtered.map(m => {
+                                        const low = isLowStock(m.quantity);
+                                        const exp = isExpired(m.expiryDate);
+                                        const nearExp = !exp && daysUntil(m.expiryDate) <= 30;
+                                        return React.createElement('tr', { key: m.id, className: 'table-row' },
+                                            React.createElement('td', { className: 'px-4 py-3 font-medium text-gray-800' }, m.name),
+                                            React.createElement('td', { className: 'px-4 py-3 text-gray-600 hidden sm:table-cell' }, m.company),
+                                            React.createElement('td', { className: 'px-4 py-3 hidden md:table-cell' },
+                                                React.createElement('span', { className: `px-2.5 py-0.5 rounded-full text-xs font-medium ${m.type === 'Tablet' ? 'bg-blue-100 text-blue-700' : m.type === 'Capsule' ? 'bg-purple-100 text-purple-700' : m.type === 'Liquid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}` }, m.type)
+                                            ),
+                                            React.createElement('td', { className: 'px-4 py-3 text-right font-medium' },
+                                                React.createElement('span', { className: low ? 'text-rose-600' : 'text-gray-700' }, m.quantity),
+                                                low && React.createElement('span', { className: 'ml-1 text-rose-400 text-xs' }, '⚠')
+                                            ),
+                                            React.createElement('td', { className: 'px-4 py-3 text-right font-medium text-gray-700 hidden sm:table-cell' }, currency(m.price)),
+                                            React.createElement('td', { className: 'px-4 py-3 hidden lg:table-cell' },
+                                                React.createElement('span', { className: `${exp ? 'text-rose-600' : nearExp ? 'text-amber-600' : 'text-gray-600'}` },
+                                                    formatDate(m.expiryDate),
+                                                    exp && React.createElement('span', { className: 'ml-1 text-rose-400 text-xs' }, '⏰'),
+                                                    nearExp && !exp && React.createElement('span', { className: 'ml-1 text-amber-400 text-xs' }, '⚠')
+                                                )
+                                            ),
+                                            React.createElement('td', { className: 'px-4 py-3 text-center' },
+                                                React.createElement('div', { className: 'flex items-center justify-center gap-1.5' },
+                                                    React.createElement('button', {
+                                                        onClick: () => openModal(m),
+                                                        className: `p-1.5 rounded-lg transition ${isAdmin ? 'text-blue-500 hover:bg-blue-50' : 'text-gray-300 cursor-not-allowed'}`,
+                                                        disabled: !isAdmin,
+                                                        title: isAdmin ? 'Edit' : 'Admin only'
+                                                    },
+                                                        React.createElement(Icon, { name: 'pen' })
+                                                    ),
+                                                    React.createElement('button', {
+                                                        onClick: () => handleDelete(m.id),
+                                                        className: `p-1.5 rounded-lg transition ${isAdmin ? 'text-rose-400 hover:bg-rose-50' : 'text-gray-300 cursor-not-allowed'}`,
+                                                        disabled: !isAdmin,
+                                                        title: isAdmin ? 'Delete' : 'Admin only'
+                                                    },
+                                                        React.createElement(Icon, { name: 'trash-alt' })
+                                                    )
+                                                )
+                                            )
+                                        );
+                                    })
+                                )
+                            )
+                        )
+                    ),
+                    showModal && React.createElement('div', { className: 'fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay bg-black/30 backdrop-blur-sm' },
+                        React.createElement('div', { className: 'modal-content glass-card rounded-2xl w-full max-w-md p-6 shadow-2xl' },
+                            React.createElement('div', { className: 'flex items-center justify-between mb-5' },
+                                React.createElement('h2', { className: 'text-xl font-bold text-gray-800' }, editingId ? 'Edit Medicine' : 'Add Medicine'),
+                                React.createElement('button', { onClick: () => setShowModal(false), className: 'text-gray-400 hover:text-gray-600 transition' },
+                                    React.createElement(Icon, { name: 'times' })
+                                )
+                            ),
+                            React.createElement('form', { onSubmit: handleSubmit, className: 'space-y-4' },
+                                React.createElement('div', null,
+                                    React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Medicine Name *'),
+                                    React.createElement('input', {
+                                        type: 'text',
+                                        value: formData.name,
+                                        onChange: (e) => setFormData({ ...formData, name: e.target.value }),
+                                        className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm',
+                                        required: true
+                                    })
+                                ),
+                                React.createElement('div', null,
+                                    React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Company *'),
+                                    React.createElement('input', {
+                                        type: 'text',
+                                        value: formData.company,
+                                        onChange: (e) => setFormData({ ...formData, company: e.target.value }),
+                                        className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm',
+                                        required: true
+                                    })
+                                ),
+                                React.createElement('div', { className: 'grid grid-cols-2 gap-3' },
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Type'),
+                                        React.createElement('select', {
+                                            value: formData.type,
+                                            onChange: (e) => setFormData({ ...formData, type: e.target.value }),
+                                            className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm'
+                                        },
+                                            React.createElement('option', { value: 'Tablet' }, 'Tablet'),
+                                            React.createElement('option', { value: 'Capsule' }, 'Capsule'),
+                                            React.createElement('option', { value: 'Liquid' }, 'Liquid'),
+                                            React.createElement('option', { value: 'Cream' }, 'Cream')
+                                        )
+                                    ),
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Quantity *'),
+                                        React.createElement('input', {
+                                            type: 'number',
+                                            min: '0',
+                                            value: formData.quantity,
+                                            onChange: (e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 }),
+                                            className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm',
+                                            required: true
+                                        })
+                                    )
+                                ),
+                                React.createElement('div', { className: 'grid grid-cols-2 gap-3' },
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Price (₹) *'),
+                                        React.createElement('input', {
+                                            type: 'number',
+                                            min: '0',
+                                            step: '0.01',
+                                            value: formData.price,
+                                            onChange: (e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 }),
+                                            className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm',
+                                            required: true
+                                        })
+                                    ),
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Expiry Date *'),
+                                        React.createElement('input', {
+                                            type: 'date',
+                                            value: formData.expiryDate,
+                                            onChange: (e) => setFormData({ ...formData, expiryDate: e.target.value }),
+                                            className: 'w-full px-4 py-2.5 bg-white/80 rounded-xl border border-gray-200 text-sm',
+                                            required: true
+                                        })
+                                    )
+                                ),
+                                React.createElement('div', { className: 'flex gap-3 pt-2' },
+                                    React.createElement('button', { type: 'button', onClick: () => setShowModal(false), className: 'flex-1 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 rounded-xl transition' }, 'Cancel'),
+                                    React.createElement('button', { type: 'submit', className: 'flex-1 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition' },
+                                        editingId ? 'Update' : 'Add', ' Medicine'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+
+            // ─── Orders ──────────────────────────────────────────────────
+            function Orders() {
+                const { data, addOrder, deleteOrder } = useApp();
+                const medicines = data.medicines || [];
+                const orders = data.orders || [];
+
+                const [showCreateModal, setShowCreateModal] = useState(false);
+                const [orderItems, setOrderItems] = useState([]);
+                const [searchMed, setSearchMed] = useState('');
+                const [selectedMedId, setSelectedMedId] = useState('');
+                const [orderQty, setOrderQty] = useState(1);
+                const [showReceipt, setShowReceipt] = useState(null);
+
+                const availableMeds = useMemo(() => {
+                    const s = searchMed.trim().toLowerCase();
+                    return medicines.filter(m => m.quantity > 0 && (m.name.toLowerCase().includes(s) || m.company.toLowerCase().includes(s)));
+                }, [medicines, searchMed]);
+
+                const addItemToOrder = () => {
+                    if (!selectedMedId) return;
+                    const med = medicines.find(m => m.id === selectedMedId);
+                    if (!med) return;
+                    if (orderQty <= 0 || orderQty > med.quantity) {
+                        alert(`Available: ${med.quantity}`);
+                        return;
+                    }
+                    const existing = orderItems.find(it => it.medicineId === med.id);
+                    if (existing) {
+                        const newQty = existing.quantity + orderQty;
+                        if (newQty > med.quantity) {
+                            alert(`Cannot exceed available stock (${med.quantity})`);
+                            return;
+                        }
+                        setOrderItems(orderItems.map(it => it.medicineId === med.id ? { ...it, quantity: newQty } : it));
+                    } else {
+                        setOrderItems([...orderItems, {
+                            medicineId: med.id,
+                            name: med.name,
+                            company: med.company,
+                            type: med.type,
+                            price: med.price,
+                            quantity: orderQty,
+                        }]);
+                    }
+                    setSelectedMedId('');
+                    setOrderQty(1);
+                    setSearchMed('');
+                };
+
+                const removeOrderItem = (id) => {
+                    setOrderItems(orderItems.filter(it => it.medicineId !== id));
+                };
+
+                const submitOrder = () => {
+                    if (orderItems.length === 0) { alert('Add at least one item.'); return; }
+                    for (const item of orderItems) {
+                        const med = medicines.find(m => m.id === item.medicineId);
+                        if (!med || med.quantity < item.quantity) {
+                            alert(`Not enough stock for ${item.name}. Available: ${med?.quantity || 0}`);
+                            return;
+                        }
+                    }
+                    addOrder(orderItems);
+                    setOrderItems([]);
+                    setShowCreateModal(false);
+                };
+
+                const totalOrderAmount = orderItems.reduce((sum, it) => sum + it.price * it.quantity, 0);
+
+                const ReceiptModal = ({ order, onClose }) => {
+                    const handlePrint = () => window.print();
+                    if (!order) return null;
+                    return React.createElement('div', { className: 'fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay bg-black/30 backdrop-blur-sm' },
+                        React.createElement('div', { className: 'modal-content glass-card rounded-2xl w-full max-w-lg p-6 shadow-2xl print-receipt' },
+                            React.createElement('div', { className: 'flex items-center justify-between mb-4 no-print' },
+                                React.createElement('h2', { className: 'text-xl font-bold text-gray-800' }, 'Receipt'),
+                                React.createElement('div', { className: 'flex gap-2' },
+                                    React.createElement('button', { onClick: handlePrint, className: 'flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition' },
+                                        React.createElement(Icon, { name: 'print' }), ' Print'
+                                    ),
+                                    React.createElement('button', { onClick: onClose, className: 'text-gray-400 hover:text-gray-600 transition' },
+                                        React.createElement(Icon, { name: 'times' })
+                                    )
+                                )
+                            ),
+                            React.createElement('div', { className: 'border-t border-gray-200 pt-4' },
+                                React.createElement('div', { className: 'text-center mb-4' },
+                                    React.createElement('p', { className: 'text-2xl font-bold text-gray-800' }, '🧾 PharmaCare'),
+                                    React.createElement('p', { className: 'text-xs text-gray-400' }, '#' + order.id.slice(0, 8).toUpperCase()),
+                                    React.createElement('p', { className: 'text-xs text-gray-400' }, new Date(order.date).toLocaleString())
+                                ),
+                                React.createElement('div', { className: 'space-y-1.5 text-sm' },
+                                    order.items.map((it, i) =>
+                                        React.createElement('div', { key: i, className: 'flex justify-between py-1 border-b border-gray-100' },
+                                            React.createElement('span', null, it.name, ' ', React.createElement('span', { className: 'text-gray-400 text-xs' }, '×' + it.quantity)),
+                                            React.createElement('span', { className: 'font-medium' }, currency(it.price * it.quantity))
+                                        )
+                                    )
+                                ),
+                                React.createElement('div', { className: 'flex justify-between pt-3 mt-2 border-t-2 border-gray-200 font-bold text-lg' },
+                                    React.createElement('span', null, 'Total'),
+                                    React.createElement('span', null, currency(order.total))
+                                ),
+                                React.createElement('p', { className: 'text-xs text-gray-400 text-center mt-4' }, 'Thank you for your purchase!')
+                            )
+                        )
+                    );
+                };
+
+                return React.createElement('div', { className: 'space-y-5' },
+                    React.createElement(NotificationBanner, null),
+                    React.createElement('div', { className: 'flex flex-col sm:flex-row sm:items-center justify-between gap-3' },
+                        React.createElement('div', null,
+                            React.createElement('h1', { className: 'text-2xl font-bold text-gray-800' }, 'Orders'),
+                            React.createElement('p', { className: 'text-gray-500 text-sm' }, orders.length + ' orders placed')
+                        ),
+                        React.createElement('button', {
+                            onClick: () => { setShowCreateModal(true);
+                                setOrderItems([]); },
+                            className: 'flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition hover:scale-[1.02]'
+                        },
+                            React.createElement(Icon, { name: 'plus' }),
+                            'New Order'
+                        )
+                    ),
+                    React.createElement('div', { className: 'glass-card rounded-2xl overflow-hidden shadow-sm' },
+                        React.createElement('div', { className: 'overflow-x-auto' },
+                            React.createElement('table', { className: 'w-full text-sm' },
+                                React.createElement('thead', null,
+                                    React.createElement('tr', { className: 'bg-gray-50/80 text-gray-600 text-xs uppercase tracking-wider' },
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold' }, 'Order ID'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-left font-semibold' }, 'Date'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-right font-semibold' }, 'Items'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-right font-semibold' }, 'Total'),
+                                        React.createElement('th', { className: 'px-4 py-3 text-center font-semibold' }, 'Actions')
+                                    )
+                                ),
+                                React.createElement('tbody', { className: 'divide-y divide-gray-100' },
+                                    orders.length === 0 ?
+                                    React.createElement('tr', null,
+                                        React.createElement('td', { colSpan: '5', className: 'px-4 py-10 text-center text-gray-400' }, 'No orders yet')
+                                    ) :
+                                    [...orders].reverse().map(o =>
+                                        React.createElement('tr', { key: o.id, className: 'table-row' },
+                                            React.createElement('td', { className: 'px-4 py-3 font-mono text-xs text-gray-600' }, '#' + o.id.slice(0, 8).toUpperCase()),
+                                            React.createElement('td', { className: 'px-4 py-3 text-gray-600' }, new Date(o.date).toLocaleDateString()),
+                                            React.createElement('td', { className: 'px-4 py-3 text-right font-medium' }, o.items.reduce((s, it) => s + it.quantity, 0) + ' items'),
+                                            React.createElement('td', { className: 'px-4 py-3 text-right font-bold text-gray-800' }, currency(o.total)),
+                                            React.createElement('td', { className: 'px-4 py-3 text-center' },
+                                                React.createElement('div', { className: 'flex items-center justify-center gap-2' },
+                                                    React.createElement('button', { onClick: () => setShowReceipt(o.id), className: 'p-1.5 text-indigo-500 hover:bg-indigo-50 rounded-lg transition' },
+                                                        React.createElement(Icon, { name: 'receipt' })
+                                                    ),
+                                                    React.createElement('button', { onClick: () => deleteOrder(o.id), className: 'p-1.5 text-rose-400 hover:bg-rose-50 rounded-lg transition' },
+                                                        React.createElement(Icon, { name: 'trash-alt' })
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    showCreateModal && React.createElement('div', { className: 'fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay bg-black/30 backdrop-blur-sm' },
+                        React.createElement('div', { className: 'modal-content glass-card rounded-2xl w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto' },
+                            React.createElement('div', { className: 'flex items-center justify-between mb-4' },
+                                React.createElement('h2', { className: 'text-xl font-bold text-gray-800' }, 'Create Order'),
+                                React.createElement('button', { onClick: () => { setShowCreateModal(false);
+                                        setOrderItems([]); }, className: 'text-gray-400 hover:text-gray-600 transition' },
+                                    React.createElement(Icon, { name: 'times' })
+                                )
+                            ),
+                            React.createElement('div', { className: 'space-y-4' },
+                                React.createElement('div', { className: 'flex gap-2' },
+                                    React.createElement('div', { className: 'flex-1' },
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Search Medicine'),
+                                        React.createElement('input', {
+                                            type: 'text',
+                                            placeholder: 'Type name...',
+                                            value: searchMed,
+                                            onChange: (e) => { setSearchMed(e.target.value);
+                                                setSelectedMedId(''); },
+                                            className: 'w-full px-3 py-2 bg-white/80 rounded-xl border border-gray-200 text-sm'
+                                        })
+                                    ),
+                                    React.createElement('div', { className: 'w-28' },
+                                        React.createElement('label', { className: 'block text-xs font-medium text-gray-500 mb-1' }, 'Qty'),
+                                        React.createElement('input', {
+                                            type: 'number',
+                                            min: '1',
+                                            value: orderQty,
+                                            onChange: (e) => setOrderQty(Math.max(1, parseInt(e.target.value) || 1)),
+                                            className: 'w-full px-3 py-2 bg-white/80 rounded-xl border border-gray-200 text-sm'
+                                        })
+                                    )
+                                ),
+                                searchMed && React.createElement('div', { className: 'max-h-40 overflow-auto bg-white/60 rounded-xl border border-gray-200 divide-y divide-gray-100' },
+                                    availableMeds.length === 0 ?
+                                    React.createElement('p', { className: 'px-3 py-2 text-sm text-gray-400' }, 'No medicines found') :
+                                    availableMeds.map(m =>
+                                        React.createElement('div', {
+                                            key: m.id,
+                                            onClick: () => { setSelectedMedId(m.id);
+                                                setSearchMed(''); },
+                                            className: `px-3 py-2 cursor-pointer hover:bg-blue-50 transition text-sm flex justify-between ${selectedMedId === m.id ? 'bg-blue-50' : ''}`
+                                        },
+                                            React.createElement('span', null, m.name, ' ', React.createElement('span', { className: 'text-gray-400 text-xs' }, '(' + m.company + ')')),
+                                            React.createElement('span', { className: 'text-gray-500' }, m.quantity + ' avail.')
+                                        )
+                                    )
+                                ),
+                                selectedMedId && React.createElement('div', { className: 'flex items-center justify-between bg-blue-50/70 rounded-xl px-3 py-2 text-sm' },
+                                    React.createElement('span', null, medicines.find(m => m.id === selectedMedId)?.name),
+                                    React.createElement('button', { onClick: addItemToOrder, className: 'px-4 py-1 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition' }, 'Add')
+                                ),
+                                orderItems.length > 0 && React.createElement('div', { className: 'border-t border-gray-200 pt-3' },
+                                    React.createElement('p', { className: 'text-xs font-medium text-gray-500 mb-2' }, 'Order Items'),
+                                    React.createElement('div', { className: 'space-y-1.5 max-h-48 overflow-auto' },
+                                        orderItems.map(it =>
+                                            React.createElement('div', { key: it.medicineId, className: 'flex justify-between items-center text-sm bg-white/60 rounded-lg px-3 py-1.5' },
+                                                React.createElement('span', null, it.name, ' ', React.createElement('span', { className: 'text-gray-400 text-xs' }, '×' + it.quantity)),
+                                                React.createElement('div', { className: 'flex items-center gap-3' },
+                                                    React.createElement('span', { className: 'font-medium' }, currency(it.price * it.quantity)),
+                                                    React.createElement('button', { onClick: () => removeOrderItem(it.medicineId), className: 'text-rose-400 hover:text-rose-600 transition' },
+                                                        React.createElement(Icon, { name: 'times' })
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    React.createElement('div', { className: 'flex justify-between pt-2 font-bold text-gray-800' },
+                                        React.createElement('span', null, 'Total'),
+                                        React.createElement('span', null, currency(totalOrderAmount))
+                                    )
+                                ),
+                                React.createElement('div', { className: 'flex gap-3 pt-2' },
+                                    React.createElement('button', {
+                                        type: 'button',
+                                        onClick: () => { setShowCreateModal(false);
+                                            setOrderItems([]); },
+                                        className: 'flex-1 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 rounded-xl transition'
+                                    }, 'Cancel'),
+                                    React.createElement('button', {
+                                        onClick: submitOrder,
+                                        disabled: orderItems.length === 0,
+                                        className: `flex-1 py-2.5 text-sm font-semibold text-white rounded-xl shadow-lg transition ${orderItems.length === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-emerald-500/20 hover:shadow-emerald-500/30'}`
+                                    }, 'Place Order')
+                                )
+                            )
+                        )
+                    ),
+                    showReceipt && React.createElement(ReceiptModal, {
+                        order: orders.find(o => o.id === showReceipt),
+                        onClose: () => setShowReceipt(null)
+                    })
+                );
+            }
+
+            // ─── Main App ─────────────────────────────────────────────────
+            function App() {
+                const { currentPage, darkMode, isAuthenticated } = useApp();
+
+                useEffect(() => {
+                    if (darkMode) document.documentElement.classList.add('dark');
+                    else document.documentElement.classList.remove('dark');
+                }, [darkMode]);
+
+                if (!isAuthenticated) {
+                    return React.createElement(LoginPage, null);
+                }
+
+                const pageMap = {
+                    dashboard: React.createElement(Dashboard, null),
+                    medicines: React.createElement(Medicines, null),
+                    orders: React.createElement(Orders, null),
+                };
+
+                return React.createElement('div', { className: `min-h-screen flex ${darkMode ? 'dark bg-gray-900' : 'bg-[#f4f7fc]'}` },
+                    React.createElement(Sidebar, null),
+                    React.createElement('main', { className: 'flex-1 ml-[72px] md:ml-[230px] p-4 md:p-6 transition-all duration-300' },
+                        React.createElement('div', { className: 'max-w-7xl mx-auto' },
+                            pageMap[currentPage] || React.createElement(Dashboard, null)
+                        ),
+                        React.createElement('div', { className: 'mt-8 pt-4 border-t border-gray-200/50 text-center text-xs text-gray-400' },
+                            '© ' + new Date().getFullYear() + ' PharmaCare · All Rights Reserved'
+                        )
+                    )
+                );
+            }
+
+            try {
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(
+                    React.createElement(AppProvider, null,
+                        React.createElement(App, null)
+                    )
+                );
+            } catch (err) {
+                document.getElementById('root').innerHTML = `
+                    <div class="flex items-center justify-center min-h-screen text-red-600 p-6">
+                        <div class="bg-white/80 backdrop-blur rounded-2xl p-8 max-w-lg shadow-xl">
+                            <h2 class="text-xl font-bold mb-2">Failed to start</h2>
+                            <p class="text-sm text-gray-600">${err.message || 'Unknown error'}</p>
+                            <p class="text-xs text-gray-400 mt-4">Check the console for details.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        })();
+    </script>
+
+</body>
+</html>
