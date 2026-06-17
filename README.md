@@ -106,23 +106,24 @@ Use the credentials below to access the system.
 📂 Project Structure
 text
 pharmcare/
-├── screenshots/        # 📸 Screenshots for README
+├── screenshots/          # 📸 Screenshots for README
 │   ├── login.png
 │   ├── dashboard.png
 │   ├── medicine.png
 │   └── order.png
-├── index.html          # Main HTML file with CDN links
-├── style.css           # Custom styles + animations
-├── script.js           # Complete React application
-└── README.md           # This file
+├── index.html            # Main HTML file with CDN links
+├── style.css             # Custom styles + animations
+├── script.js             # Complete React application
+└── README.md             # This file
+
 🔐 Login Credentials
 Role	Username	Password
 Admin (full access)	admin	admin123
-Staff (view & orders only)	staff	staff123
+Staff (view & orders only) staff	staff123
+
 🛠️ Installation & Setup
 Prerequisites
 Any modern browser (Chrome, Firefox, Edge, Safari)
-
 A local server (Live Server extension for VS Code recommended)
 
 Steps
